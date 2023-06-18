@@ -85,3 +85,19 @@ Now you have an object file called example2-3.o. To view the symbols pass the ne
 As you can see the symbols match the functions we defined in our original .c file. Well my Mac adds underscores in front of them but it seems that on Linux it wouldn't. You can see the symbol table of this object using the readelf utility.
 
     $ readelf -s example2-3.o
+
+    Symbol table '.symtab' contains 5 entries:
+    Num:    Value          Size Type    Bind   Vis      Ndx Name
+        0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND 
+        1: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS example2-3.c
+        2: 0000000000000000     0 SECTION LOCAL  DEFAULT    1 .text
+        3: 0000000000000000    33 FUNC    GLOBAL DEFAULT    1 average
+        4: 0000000000000021    73 FUNC    GLOBAL DEFAULT    1 sum
+
+These sections of the object file will be expanded on later.
+
+To see the disassembly of the machine-level instructions, under each function symbol, you can use the objdump utility.
+
+    $ objdump -d example2-3.o
+
+In C there is no function overloading. The object files do not store any info about parameters or return types. Only the name of the function is used to identify it which could lead to unexpected errors if you use a function with a different signature but the same name. The linker will not catch this error and it is on the programmer to choose appropriate names.
