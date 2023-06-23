@@ -49,3 +49,19 @@ We can also view the static segments of an executable using objdump.
     int main(int argc, char** argv){
         return 0;
     }
+
+We can view the data segment of the corresponding executable and see the following.
+
+
+    $ objdump -s -j .data ./a.out
+    a.out:     file format elf64-x86-64
+
+    Contents of section .data:
+     4000 00000000 00000000 08400000 00000000  .........@......
+     4010 21000000 78563412 41424344 4500      !...xV4.ABCDE.  
+
+This makes me a little confused about what are sections vs segments. Is .data a section inside the data segment since it has a period prefix? That was a common theme of sections in the readelf outputs on sections. Oh well moving on. The -s flag tells objdump to show all of the section this is the same as the --full-contents option. The -j .data specifies which section to show by name. The format for the -j switch is "-j name" or "--section=name". Under "Contents of section .data" we see two rows. The first column of each row is the address of the data. The next 4 columns are data. The last column is the ASCII format of the previous 4 columns. We can see that the 4 data columns are displayed in hex. The int with the value 33 is the second column of the second row 21000000. The data is also little endian so our variable specified in hex to be 0x12345678 is stored in the third column second row as 78563412. The next column over has the hex representation of the ASCII values "ABCDE".
+
+## Text Segment
+
+The linker writes the resulting machine-level instructions into the executable.
